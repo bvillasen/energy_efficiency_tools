@@ -17,7 +17,6 @@ EXEC="${HOME}/code/cholla/bin/cholla.hydro.frontier parameter_file.txt"
 AFFINITY="-c 7 --gpu-bind=closest"  
 
 
-
 #### Setup application environment
 SYSTEM=frontier source ${HOME}/code/cholla/scripts/set_env.sh
 
@@ -43,7 +42,9 @@ echo "Starting SLURM job. $(date)"
 ${OMNISTAT_WRAPPER} usermode --start --interval 1
 
 # Run the application
+echo "Starting application. $(date)"
 srun -n $N_MPI $AFFINITY ${EE_TOOLS_PATH}/tools/app_launcher.sh  $EXEC > ${WORK_DIR}/app_output.log
+echo "Finished application. $(date)"
 
 # Finish Omnistat, generate summary pdf and copy database
 ${OMNISTAT_WRAPPER} usermode --stopexporters
