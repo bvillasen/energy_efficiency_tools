@@ -19,7 +19,7 @@ fi
 HOSTNAME=$(hostname)
 
 if [ "$RANK_IS_ROOT" == "1" ]; then
-  ENERGY_COUNTER_FILE=${ENERGY_COUNTER_DIR}/energy_start_${NODE_ID}${ENERGY_COUNTER_SUFFIX}.txt
+  ENERGY_COUNTER_FILE=${ENERGY_COUNTER_DIR}/energy_start_node_${NODE_ID}${ENERGY_COUNTER_SUFFIX}.txt
   echo "Collecting energy counter start. $(date)"
   cat /sys/cray/pm_counters/energy > ${ENERGY_COUNTER_FILE}
 fi
@@ -28,7 +28,7 @@ APP_EXECUTABLE="$*"
 eval "$APP_EXECUTABLE"
 
 if [ "$RANK_IS_ROOT" == "1" ]; then
-  ENERGY_COUNTER_FILE=${ENERGY_COUNTER_DIR}/energy_end_${NODE_ID}${ENERGY_COUNTER_SUFFIX}.txt
+  ENERGY_COUNTER_FILE=${ENERGY_COUNTER_DIR}/energy_end_node_${NODE_ID}${ENERGY_COUNTER_SUFFIX}.txt
   echo "Collecting energy counter end. $(date)"
   cat /sys/cray/pm_counters/energy > ${ENERGY_COUNTER_FILE}
 fi

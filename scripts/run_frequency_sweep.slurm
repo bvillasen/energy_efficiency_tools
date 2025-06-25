@@ -29,7 +29,7 @@ ml omnistat-wrapper
 
 #### Setup directory for energy counters
 export ENERGY_COUNTER_DIR=${WORK_DIR}/energy_counters
-if [ ! -d "${ENERGY_COUNTER_DIR}"]; then
+if [ ! -d "${ENERGY_COUNTER_DIR}" ]; then
   mkdir -p ${ENERGY_COUNTER_DIR}
 fi
 
