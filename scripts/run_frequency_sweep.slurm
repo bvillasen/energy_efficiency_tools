@@ -7,12 +7,15 @@
 #SBATCH -o job_output.log
 #SBATCH -q debug
 
+#### Global parameters
+EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools
 
 #### Job parameters
 WORK_DIR=$PWD
 N_MPI=8
 EXEC="${HOME}/code/cholla/bin/cholla.hydro.frontier parameter_file.txt"
 AFFINITY="-c 7 --gpu-bind=closest"  
+
 
 
 #### Setup application environment
@@ -25,17 +28,22 @@ ml use /autofs/nccs-svm1_sw/crusher/amdsw/modules
 ml omnistat-wrapper
 
 
+#### Setup directory for energy counters
+export ENERGY_COUNTER_DIR=${WORK_DIR}/energy_counters
+if [ ! -d "${ENERGY_COUNTER_DIR}"]; then
+  mkdir -p ${ENERGY_COUNTER_DIR}
+fi
 
-#### Run the job
+
+#### Run the frequency sweep job
 echo "SLUM_NODES=$SLURM_NNODES  NODE_LIST:$SLURM_NODELIST"
 echo "Starting SLURM job. $(date)"
 
 # Start Omnistat (one second sampling rate)
 ${OMNISTAT_WRAPPER} usermode --start --interval 1
 
-echo "Starting application. $(date)"
-srun -n $N_MPI $AFFINITY $EXEC > ${WORK_DIR}/app_output.log
-echo "Finished application. $(date)"
+# Run the application
+srun -n $N_MPI $AFFINITY ${EE_TOOLS_PATH}/tools/app_launcher.sh  $EXEC > ${WORK_DIR}/app_output.log
 
 # Finish Omnistat, generate summary pdf and copy database
 ${OMNISTAT_WRAPPER} usermode --stopexporters
