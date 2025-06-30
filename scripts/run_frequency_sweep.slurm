@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A ven114
 #SBATCH -J freq_sweep
-#SBATCH --time=0:20:00
+#SBATCH --time=1:20:00
 #SBATCH --nodes=1
 #SBATCH -e job_error.log
 #SBATCH -o job_output.log
@@ -10,8 +10,8 @@
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools
 DEVICE_IDS=(0 1 2 3 4 5 6 7)
-# MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
-MAX_SCLK_VALS=(1700 1400 1100 800)
+MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
+# MAX_SCLK_VALS=(1700 1400 1100 800)
 
 #### Job parameters
 WORK_DIR=$PWD
