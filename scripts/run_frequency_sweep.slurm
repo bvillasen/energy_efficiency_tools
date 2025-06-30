@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A ven114
 #SBATCH -J freq_sweep
-#SBATCH --time=2:00:00
+#SBATCH --time=0:20:00
 #SBATCH --nodes=1
 #SBATCH -e job_error.log
 #SBATCH -o job_output.log
@@ -9,9 +9,9 @@
 
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools
-# DEVICE_IDS=(0 1 2 3 4 5 6 7)
-MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
-# MAX_SCLK_VALS=(1700 1400 1100 800)
+DEVICE_IDS=(0 1 2 3 4 5 6 7)
+# MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
+MAX_SCLK_VALS=(1700 1400 1100 800)
 
 #### Job parameters
 WORK_DIR=$PWD
@@ -59,8 +59,8 @@ do
   # Print the SCLK range
   rocm-smi --showsclkrange
 
-  # Start Omnistat (one second sampling rate)
-  ${OMNISTAT_WRAPPER} usermode --start --interval 1
+  # Start Omnistat (0.001 second sampling rate)
+  ${OMNISTAT_WRAPPER} usermode --start --interval 0.01
 
   # Run the application
   echo "Starting application. $(date)"
@@ -69,7 +69,7 @@ do
 
   # Finish Omnistat, generate summary pdf and copy database
   ${OMNISTAT_WRAPPER} usermode --stopexporters
-  ${OMNISTAT_WRAPPER} query --interval 1 --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf
+  ${OMNISTAT_WRAPPER} query --interval 0.01 --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf
   ${OMNISTAT_WRAPPER} usermode --stopserver
   mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
 
