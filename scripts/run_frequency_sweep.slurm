@@ -64,9 +64,9 @@ do
 
   # Run the application
   echo "Starting application. $(date)"
-  echo $($(date +"%Y-%m-%d %H:%M:%S.%N")) > ${RUN_DIR}/time_start.txt
+  echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_start.txt
   srun -n $N_MPI $AFFINITY ${EE_TOOLS_PATH}/tools/app_launcher.sh  $EXEC > ${RUN_DIR}/app_output.txt
-  echo $($(date +"%Y-%m-%d %H:%M:%S.%N")) > ${RUN_DIR}/time_end.txt
+  echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_end.txt
   echo "Finished application. $(date)"
 
   # Finish Omnistat, generate summary pdf and copy database
