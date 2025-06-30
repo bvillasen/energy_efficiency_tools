@@ -11,8 +11,7 @@
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools
 DEVICE_IDS=(0 1 2 3 4 5 6 7)
 MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
-# MAX_SCLK_VALS=(1700 1500 1300 1100 900 700)
-# MAX_SCLK_VALS=(1700 1400 1100 800)
+
 
 #### Job parameters
 WORK_DIR=$PWD
@@ -29,7 +28,6 @@ SYSTEM=frontier source ${HOME}/code/cholla/scripts/set_env.sh
 export OMNISTAT_VICTORIA_DATADIR=/tmp/omnistat/${SLURM_JOB_ID}
 ml use /autofs/nccs-svm1_sw/crusher/amdsw/modules
 ml omnistat-wrapper
-
 
 
 #### Run the frequency sweep job
