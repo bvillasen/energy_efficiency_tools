@@ -25,10 +25,12 @@ print( f'Input directory: {input_dir}')
 print( f'EDP alpha: {edp_alpha}')
 print( f'EDP beta: {edp_beta}')
 
+# Find the frequency cap values in the input directory
 maxsclk_dirs = [ d for d in os.listdir(input_dir) if os.path.isdir(f'{input_dir}/{d}') and d.find('maxsclk') >= 0 ]
 maxsclk_vals = [ int(d.split('_')[1]) for d in maxsclk_dirs ]
 maxsclk_vals.sort()
 
+# Load the energy and timing data for each run in in the sweep
 data = {}
 for run_indx, maxsclk in enumerate(maxsclk_vals):
   print(f'\nLoading data for maxsclk: {maxsclk}')
@@ -39,6 +41,6 @@ for run_indx, maxsclk in enumerate(maxsclk_vals):
   energy_data = tools.load_energy_counters(run_dir)
   data[run_indx]['energy'] = energy_data
 
-
+# Generate the time, energy, and EDP vs frequency cap plots
 figure_name = f'{input_dir}/time_energy_vs_freq.png'
 tools.plot_energy_analysis( data, edp_alpha, edp_beta, figure_name )
