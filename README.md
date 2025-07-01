@@ -8,7 +8,7 @@ Tools for energy efficiency related experiments
 
 The script `scripts/run_frequency_sweep.slurm` provides an example to run a frequency sweep study of an application on Frontier. The example runs a [Cholla](https://github.com/cholla-hydro/cholla) hydrodynamics simulation using the 8 devices on a Frontier node.
 
-The script will iterate over several GPU frequency caps from 1700 to 700 MHz and it will run the application for each frequency cap. Additionally, the script runs an instance of [Omnistat](https://github.com/AMDResearch/omnistat) for telemetry data collection.
+The script will iterate over several GPU frequency caps from 1700 to 700 MHz and it will run an instance of the application for each frequency cap. Additionally, the script runs an instance of [Omnistat](https://github.com/AMDResearch/omnistat) for telemetry data collection.
 
 In principle, the script should be easily modifiable to run other applications by editing the options at the top of the script. The main variables to change in the script are:
 
