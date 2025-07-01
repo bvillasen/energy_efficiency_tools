@@ -19,6 +19,9 @@ In principle, the script should be easily modifiable to run other applications b
 
 During runtime, a directory is created for each frequency cap (for example `maxsclk_1400` for frequency cap of 1400 MHz) where the application output, Omnistat data and energy and time counters are recorded.
 
+**Energy measurement**: For each run, Omnistat provides a time trace of the GPU power consumed byu the application and the Omnistat summary saved for each frequency cap also includes the total GPU energy used during the application execution. Additionally, the script records the node energy counter from the Cray PM counters located in `/sys/cray/pm_counters/energy` of each compute node. Since the node energy counter includes energy consumption from other elements in the node (CPU, memory, NICs, cooling?), it gives a better view of the total system energy used by each run of the application and therefore, we take the difference of the node energy counter at the beggening and the end of the application execution to determine the energy consumption ofd each run. 
+
+
 ### Plot the results
 
 After running the script, you can use the `scripts/get_energy_analysis.py` Python script to gather and plot the data. To run the script you only need to pass the directory where the frequency sweep script was run.
