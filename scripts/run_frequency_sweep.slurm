@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A ven114
 #SBATCH -J freq_sweep
-#SBATCH --time=0:45:00
+#SBATCH --time=0:05:00
 #SBATCH --nodes=1
 #SBATCH -e job_error.log
 #SBATCH -o job_output.log
