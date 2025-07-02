@@ -19,12 +19,32 @@ export USE_SYSTEM_MONITOR=1
 #### Job parameters
 WORK_DIR=$PWD
 N_MPI=8
-EXEC="${HOME}/code/cholla/bin/cholla.hydro.frontier parameter_file.txt"
-AFFINITY="-c 7 --gpu-bind=closest"  
+# Cholla
+# EXEC="${HOME}/code/cholla/bin/cholla.hydro.frontier parameter_file.txt"
+# AFFINITY="-c 7 --gpu-bind=closest"  
+
+# #### Setup application environment
+# SYSTEM=frontier source ${HOME}/code/cholla/scripts/set_env.sh
 
 
-#### Setup application environment
-SYSTEM=frontier source ${HOME}/code/cholla/scripts/set_env.sh
+# rocHPL
+module purge
+module load PrgEnv-gnu
+module load rocm/6.2.4
+module load gcc
+module load craype-accel-amd-gfx90a
+export MPICH_GPU_SUPPORT_ENABLED=1
+HPL_P=2
+HPL_Q=4
+HPL_N=256000
+HPL_NB=512             
+HPL_p=2
+HPL_q=4
+HPL_f=0.3
+N_ITER=1 
+EXEC="${HOME}/code/energy_efficiency/apps/rocHPL/code/rocHPL/build/run_rocHPL -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
+AFFINITY="-c 7 --cpu-bind=cores --threads-per-core=1 --gpus-per-task 1 --gpu-bind=closest"
+
 
 if [ ${USE_OMNISTAT} -eq 1 ]; then
   #### Setup omnistat
