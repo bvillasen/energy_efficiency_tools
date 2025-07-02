@@ -43,7 +43,7 @@ HPL_p=2
 HPL_q=4
 HPL_f=0.3
 N_ITER=1 
-EXEC="${HOME}/code/energy_efficiency/apps/rocHPL/code/rocHPL/build/run_rocHPL -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
+EXEC="${HOME}/code/energy_efficiency/apps/rocHPL/code/rocHPL/build/run_rochpl -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
 AFFINITY="-c 7 --cpu-bind=cores --threads-per-core=1 --gpus-per-task 1 --gpu-bind=closest"
 
 
