@@ -26,8 +26,9 @@ SYSTEM=frontier source ${HOME}/code/cholla/scripts/set_env.sh
 
 #### Setup omnistat
 export OMNISTAT_VICTORIA_DATADIR=/tmp/omnistat/${SLURM_JOB_ID}
+SAMPLING_INTERVAL=0.1
 ml use /autofs/nccs-svm1_sw/crusher/amdsw/modules
-ml omnistat-wrapper
+ml omnistat-wrapper/1.6.0
 
 
 #### Run the frequency sweep job
@@ -58,8 +59,8 @@ do
   # Print the SCLK range
   rocm-smi --showsclkrange
 
-  # Start Omnistat (0.001 second sampling rate)
-  ${OMNISTAT_WRAPPER} usermode --start --interval 0.01
+  # Start Omnistat
+  ${OMNISTAT_WRAPPER} usermode --start --interval ${SAMPLING_INTERVAL}
 
   # Run the application
   echo "Starting application. $(date)"
@@ -70,7 +71,7 @@ do
 
   # Finish Omnistat, generate summary pdf and copy database
   ${OMNISTAT_WRAPPER} usermode --stopexporters
-  ${OMNISTAT_WRAPPER} query --interval 0.01 --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf
+  ${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf
   ${OMNISTAT_WRAPPER} usermode --stopserver
   mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
 
