@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A ven114
 #SBATCH -J freq_sweep
-#SBATCH --time=0:45:00
+#SBATCH --time=0:15:00
 #SBATCH --nodes=1
 #SBATCH -e job_error.log
 #SBATCH -o job_output.log
@@ -10,7 +10,8 @@
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools
 DEVICE_IDS=(0 1 2 3 4 5 6 7)
-MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
+# MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
+MAX_SCLK_VALS=(1700 1400 1100 800)
 
 
 #### Job parameters
@@ -24,7 +25,7 @@ AFFINITY="-c 7 --gpu-bind=closest"
 SYSTEM=frontier source ${HOME}/code/cholla/scripts/set_env.sh
 
 
-#### Setup omnistat
+#### Setup Omnistat
 export OMNISTAT_VICTORIA_DATADIR=/tmp/omnistat/${SLURM_JOB_ID}
 SAMPLING_INTERVAL=0.1
 ml use /autofs/nccs-svm1_sw/crusher/amdsw/modules
@@ -56,7 +57,7 @@ do
     eval ${set_freq_cmnd} 
   done
 
-  # Print the SCLK range
+  # Print the GPU frequency range
   rocm-smi --showsclkrange
 
   # Start Omnistat
@@ -71,7 +72,7 @@ do
 
   # Finish Omnistat, generate summary pdf and copy database
   ${OMNISTAT_WRAPPER} usermode --stopexporters
-  ${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf
+  ${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf --export ${RUN_DIR}
   ${OMNISTAT_WRAPPER} usermode --stopserver
   mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
 
