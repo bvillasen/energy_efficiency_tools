@@ -19,7 +19,23 @@ In principle, the script should be easily modifiable to run other applications b
 
 During runtime, a directory is created for each frequency cap (for example `maxsclk_1400` for frequency cap of 1400 MHz) where the application output, Omnistat data and energy and time counters are recorded.
 
-**Energy measurement**: For each run, Omnistat provides a time trace of the GPU power consumed byu the application and the Omnistat summary saved for each frequency cap also includes the total GPU energy used during the application execution. Additionally, the script records the node energy counter from the Cray PM counters located in `/sys/cray/pm_counters/energy` of each compute node used for the run. Since the node energy counter includes energy consumption from other elements in the node (CPU, memory, NICs, cooling?), it gives a better view of the total system energy used by each run of the application and therefore, we take the difference of the node energy counter at the beggening and the end of the application execution to determine the energy consumption ofd each run. 
+
+### Energy measurement
+
+Omnistat collects the GPU power reported by `rocm-smi` as well  as the 
+power reported by the Cray PM counters (GPU, CPU, memory, and node power). We use the Node energy from the PM counters as our energy metric.
+
+The Omnistat summary report now includes the energy used during the run collected by from the PM counters:
+
+<p align="center">
+  <img src="./figures/omnistat_energy_report.png" width="700"/>
+</p>
+
+The timeseries for the power collected from the PM counters is also made available by Omnistat:
+
+<p align="center">
+  <img src="./figures/omnistat_power_pm_counters.png" width="700"/>
+</p>
 
 
 ### Plot the results
