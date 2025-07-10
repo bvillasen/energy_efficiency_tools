@@ -1,27 +1,31 @@
 #!/bin/bash
-#SBATCH -A ven114
 #SBATCH -J freq_sweep
-#SBATCH --time=0:15:00
-#SBATCH --nodes=1
+#SBATCH -A ven114          # EDIT: Use your project account 
+#SBATCH --time=1:00:00     # EDIT: Time limit for the job
+#SBATCH --nodes=1          # EDIT: Number of nodes for the job
+#SBATCH -q debug           # EDIT: Comment if you don't want to submit to the debug queue 
 #SBATCH -e job_error.log
 #SBATCH -o job_output.log
-#SBATCH -q debug
 
 #### Global parameters
-EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools
-FREQUENCY_CAP_VALS=(1700 1400 1100 800)
-# FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
+EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools  # EDIT: location of the energy_efficiency_tools directory 
+FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 500)
 
 
 #### Job parameters
-WORK_DIR=$PWD
-N_MPI=8
-EXEC="${HOME}/code/cholla/bin/cholla.hydro.frontier parameter_file.txt"
-AFFINITY="-c 7 --gpu-bind=closest"  
+WORK_DIR=$PWD                          # EDIT: Work directory for the frequency sweep 
+N_MPI_PER_NODE=8                       # EDIT: Number of MPI ranks per node 
+EXEC="${HOME}/code/cholla/bin/cholla.hydro.frontier parameter_file.txt" # EDIT: Application executable and parameters
+AFFINITY="-c 7 --gpu-bind=closest"     # EDIT: Affinity config to run your application
+N_MPI=$(expr ${N_MPI_PER_NODE} / ${SLUM_NODES})
 
 
-#### Setup application environment
+#### Setup application environment  
+# EDIT: Environment setup for your application
 SYSTEM=frontier source ${HOME}/code/cholla/scripts/set_env.sh
+
+# NOTHING ELSE TO EDIT BELOW
+################################################################################
 
 
 #### Setup Omnistat
