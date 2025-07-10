@@ -9,7 +9,6 @@
 
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools
-DEVICE_IDS=(0 1 2 3 4 5 6 7)
 # MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
 MAX_SCLK_VALS=(1700 1400 1100 800)
 
@@ -40,6 +39,8 @@ echo "Starting SLURM job. $(date)"
 for MAX_SCLK in "${MAX_SCLK_VALS[@]}"
 do
 
+  export FREQUENCY_CAP=$MAX_SCLK
+  
   # Setup directory for this MAX_SCLK
   RUN_DIR=${WORK_DIR}/maxsclk_${MAX_SCLK}
   if [ ! -d "${RUN_DIR}" ]; then
@@ -48,17 +49,6 @@ do
 
   # Setup directory for energy counters
   export ENERGY_COUNTER_DIR=${RUN_DIR}
-
-  # Set the frequency cap on all devices on the node
-  for DEVICE_ID in "${DEVICE_IDS[@]}"
-  do
-    set_freq_cmnd="/usr/bin/set_gpu_max_sclk -g ${DEVICE_ID} ${MAX_SCLK}"
-    echo -e "${set_freq_cmnd} "
-    eval ${set_freq_cmnd} 
-  done
-
-  # Print the GPU frequency range
-  rocm-smi --showsclkrange
 
   # Start Omnistat
   ${OMNISTAT_WRAPPER} usermode --start --interval ${SAMPLING_INTERVAL}
