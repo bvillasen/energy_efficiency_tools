@@ -27,7 +27,7 @@ if [ -n "$FREQUENCY_CAP" ] && [ "$RANK_IS_ROOT" == "1" ]; then
   do
     NODE_ID=$(expr ${GLOBAL_RANK} / ${N_RANKS_LOCAL})
     set_freq_cmnd="/usr/bin/set_gpu_max_sclk -g ${DEVICE_ID} ${FREQUENCY_CAP}"
-    echo -e "Node_id: ${NODE_ID}  ${set_freq_cmnd} "
+    echo -e "NodeID: ${NODE_ID}  ${set_freq_cmnd} "
     eval ${set_freq_cmnd} 
   done
 
