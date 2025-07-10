@@ -18,7 +18,8 @@ WORK_DIR=$PWD                          # EDIT: Work directory for the frequency 
 N_MPI_PER_NODE=8                       # EDIT: Number of MPI ranks per node 
 EXEC="${HOME}/code/cholla/bin/cholla.hydro.frontier parameter_file.txt" # EDIT: Application executable and parameters
 AFFINITY="-c 7 --gpu-bind=closest"     # EDIT: Affinity config to run your application
-N_MPI=$(expr ${N_MPI_PER_NODE} / ${SLUM_NODES})
+N_NODES=${SLURM_JOB_NUM_NODES}
+N_MPI=$((N_NODES*N_MPI_PER_NODE))
 
 
 #### Setup application environment  
@@ -30,6 +31,8 @@ SYSTEM=frontier source ${HOME}/code/cholla/scripts/set_env.sh
 
 echo "EXEC: ${EXEC}"
 echo "AFFINITY: ${AFFINITY}"
+echo "N_NODES: ${N_NODES}"
+echo "N_MPI_PER_NODE: ${N_MPI_PER_NODE}"
 echo "N_MPI: ${N_MPI}"
 
 #### Setup Omnistat
@@ -40,7 +43,7 @@ ml omnistat-wrapper/1.6.0
 
 
 #### Run the frequency sweep job
-echo "SLUM_NODES=$SLURM_NNODES  NODE_LIST:$SLURM_NODELIST"
+echo "SLUM_NODES=$SLURM_JOB_NUM_NODES  NODE_LIST:$SLURM_NODELIST"
 echo "Starting SLURM job. $(date)"
 
 # Loop over the frequency caps 
