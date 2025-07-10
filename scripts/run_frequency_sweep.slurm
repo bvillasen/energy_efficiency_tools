@@ -9,8 +9,8 @@
 
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools
-# MAX_SCLK_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
-MAX_SCLK_VALS=(1700 1400 1100 800)
+FREQUENCY_CAP_VALS=(1700 1400 1100 800)
+# FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700)
 
 
 #### Job parameters
@@ -36,13 +36,14 @@ echo "SLUM_NODES=$SLURM_NNODES  NODE_LIST:$SLURM_NODELIST"
 echo "Starting SLURM job. $(date)"
 
 # Loop over the frequency caps 
-for MAX_SCLK in "${MAX_SCLK_VALS[@]}"
+for MAX_SCLK in "${FREQUENCY_CAP_VALS[@]}"
 do
 
   export FREQUENCY_CAP=$MAX_SCLK
+  echo "Running with frequency cap: ${FREQUENCY_CAP} MHz"
   
-  # Setup directory for this MAX_SCLK
-  RUN_DIR=${WORK_DIR}/maxsclk_${MAX_SCLK}
+  # Setup directory for this FREQUENCY_CAP
+  RUN_DIR=${WORK_DIR}/maxsclk_${FREQUENCY_CAP}
   if [ ! -d "${RUN_DIR}" ]; then
     mkdir -p ${RUN_DIR}
   fi
