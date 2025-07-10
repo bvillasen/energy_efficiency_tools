@@ -40,7 +40,7 @@ for MAX_SCLK in "${FREQUENCY_CAP_VALS[@]}"
 do
 
   export FREQUENCY_CAP=$MAX_SCLK
-  echo "\nStarting run with frequency cap: ${FREQUENCY_CAP} MHz"
+  echo "###### Starting run with frequency cap: ${FREQUENCY_CAP} MHz"
   
   # Setup directory for this FREQUENCY_CAP
   RUN_DIR=${WORK_DIR}/maxsclk_${FREQUENCY_CAP}
@@ -67,7 +67,7 @@ do
   ${OMNISTAT_WRAPPER} usermode --stopserver
   mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
 
-  echo "Finished run with frequency cap: ${FREQUENCY_CAP} MHz"
+  echo "###### Finished run with frequency cap: ${FREQUENCY_CAP} MHz"
   
 done
 

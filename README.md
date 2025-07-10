@@ -55,3 +55,38 @@ The output of the Cholla run on one Frontier node with $\alpha=1.0$ and $\beta=1
 </p>
 
 
+## Omnistat tools
+
+### Interval annotations
+
+You can annotate a interval or section of your annotation which will allow you to query the Omnistat metrics for that specific interval. Below is an example of how to do it for a C/C++ application. 
+
+```C++
+#include <cstdlib> // Needed to call system()
+
+int main(int argc, char *argv[]){
+
+  ...
+
+  if (rank == 0){
+    std::string marker_label = "simulation_loop";
+    std::string omnistat_marker_cmd = "${OMNISTAT_DIR}/omnistat-annotate --mode start --text \"" + marker_label + "\"";
+    system(omnistat_marker_cmd.c_str());      
+  }       
+
+  // Application section to mark by the interval annotation 
+
+  if (rank == 0){
+    std::string omnistat_marker_cmd = "${OMNISTAT_DIR}/omnistat-annotate --mode stop";
+    system(omnistat_marker_cmd.c_str());      
+  }  
+
+}
+```
+
+The annotated sections are highlighted in the timeseries when visualizing with Grafana 
+
+<p align="center">
+  <img src="./figures/omnistat_annotation.png" width="700"/>
+</p>
+
