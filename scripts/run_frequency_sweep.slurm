@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J freq_sweep
 #SBATCH -A ven114          # EDIT: Use your project account 
-#SBATCH --time=2:00:00     # EDIT: Time limit for the job
+#SBATCH --time=0:15:00     # EDIT: Time limit for the job
 #SBATCH --nodes=1          # EDIT: Number of nodes for the job
 #SBATCH -q debug           # EDIT: Comment if you don't want to submit to the debug queue 
 #SBATCH -e job_error.log
@@ -9,16 +9,18 @@
 
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools  # EDIT: location of the energy_efficiency_tools directory 
-FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 500) 
+# FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 500) 
+FREQUENCY_CAP_VALS=(1700 700) 
 
 
 #### Job parameters
 WORK_DIR=$PWD                          # EDIT: Work directory for the frequency sweep 
 N_MPI_PER_NODE=8                       # EDIT: Number of MPI ranks per node 
 EXEC="${HOME}/code/cholla/bin/cholla.hydro.frontier parameter_file.txt" # EDIT: Application executable and parameters
-AFFINITY="-c 7 --gpu-bind=closest"     # EDIT: Affinity config to run your application
+AFFINITY="-c 7 --ntasks-per-node=${N_MPI_PER_NODE} --gpus-per-task=1 --gpu-bind=closest"     # EDIT: Affinity config to run your application
 N_NODES=${SLURM_JOB_NUM_NODES}
 N_MPI=$((N_NODES*N_MPI_PER_NODE))
+#NOTE: The srun command looks like follows: srun -n $N_MPI $AFFINITY $EXEC
 
 
 #### Setup application environment  
@@ -50,7 +52,7 @@ for MAX_SCLK in "${FREQUENCY_CAP_VALS[@]}"
 do
 
   export FREQUENCY_CAP=$MAX_SCLK
-  echo "###### Starting run with frequency cap: ${FREQUENCY_CAP} MHz"
+  echo -e "\n###### Starting run with frequency cap: ${FREQUENCY_CAP} MHz"
   
   # Setup directory for this FREQUENCY_CAP
   RUN_DIR=${WORK_DIR}/maxsclk_${FREQUENCY_CAP}
