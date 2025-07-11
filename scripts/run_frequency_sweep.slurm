@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J freq_sweep
 #SBATCH -A ven114          # EDIT: Use your project account 
-#SBATCH --time=0:15:00     # EDIT: Time limit for the job
+#SBATCH --time=2:00:00     # EDIT: Time limit for the job
 #SBATCH --nodes=1          # EDIT: Number of nodes for the job
 #SBATCH -q debug           # EDIT: Comment if you don't want to submit to the debug queue 
 #SBATCH -e job_error.log
@@ -9,8 +9,7 @@
 
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools  # EDIT: location of the energy_efficiency_tools directory 
-# FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 500) 
-FREQUENCY_CAP_VALS=(1700 700) 
+FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 500) 
 
 
 #### Job parameters
