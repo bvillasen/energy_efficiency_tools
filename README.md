@@ -38,7 +38,7 @@ The timeseries for the power collected from the PM counters is also made availab
 </p>
 
 
-### Plot the results
+## Plot the results
 
 After running the script, you can use the `scripts/get_energy_analysis.py` Python script to gather and plot the data. To run the script you only need to pass the directory where the frequency sweep script was run.
 
@@ -53,6 +53,25 @@ The output of the Cholla run on one Frontier node with $\alpha=1.0$ and $\beta=1
 <p align="center">
   <img src="./figures/cholla_time_energy_vs_freq.png" width="700"/>
 </p>
+
+
+### Plot multiple experiments
+
+If you pass multiple directories as the input directory to the `get_energy_analysis.py` it will plot the 
+measurements for all of experiments in a single plot. 
+For example, the the following figure shows the time and energy measurements for multiple experiments increasing the number of nodes. 
+
+
+```bash
+python scripts/get_energy_analysis.py --input_dir freq_sweep_nnodes1 freq_sweep_nnodes2 freq_sweep_nnodes4 freq_sweep_nnodes8 freq_sweep_nnodes16  --edp_alpha 1.0 --edp_beta 1.0
+```
+
+<p align="center">
+  <img src="./figures/cholla_time_energy_vs_freq_weak_scaling.png" width="700"/>
+</p>
+
+
+
 
 
 ## Omnistat tools
