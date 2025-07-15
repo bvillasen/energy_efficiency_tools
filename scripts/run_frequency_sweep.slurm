@@ -77,6 +77,7 @@ do
   ${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf --export ${RUN_DIR}
   ${OMNISTAT_WRAPPER} usermode --stopserver
   mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
+  mv exporter.log vic_server.log ${RUN_DIR}
 
   echo "###### Finished run with frequency cap: ${FREQUENCY_CAP} MHz"
   
