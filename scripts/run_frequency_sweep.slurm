@@ -9,7 +9,7 @@
 
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools  # EDIT: location of the energy_efficiency_tools directory 
-FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 500) 
+FREQUENCY_CAP_VALS=(1700 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 501) 
 
 
 #### Job parameters
