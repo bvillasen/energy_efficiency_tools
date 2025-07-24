@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -J rocHPL
-#SBATCH -a ven114 
+#SBATCH -A ven114 
 #SBATCH --time=0:08:00     # EDIT: Time limit for the job
 #SBATCH --nodes=1          # EDIT: Number of nodes for the job
 #SBATCH -e job_error.log
