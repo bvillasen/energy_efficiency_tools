@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J rocHPL
-#SBATCH -p MI250X_A1_COS_OK 
-#SBATCH --time=2:00:00     # EDIT: Time limit for the job
+#SBATCH -a ven114 
+#SBATCH --time=0:08:00     # EDIT: Time limit for the job
 #SBATCH --nodes=1          # EDIT: Number of nodes for the job
 #SBATCH -e job_error.log
 #SBATCH -o job_output.log
