@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J rocHPL
 #SBATCH -A ven114 
-#SBATCH --time=0:08:00     # EDIT: Time limit for the job
+#SBATCH --time=0:10:00     # EDIT: Time limit for the job
 #SBATCH --nodes=1          # EDIT: Number of nodes for the job
 #SBATCH -e job_error.log
 #SBATCH -o job_output.log
@@ -88,27 +88,27 @@ echo -e "OMP_NUM_THREADS: ${OMP_NUM_THREADS}"
 echo -e "RUN_DIR: ${RUN_DIR}"
 
 
-# ROCHPL_CMD="${ROCHPL_EXEC} -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
-# echo "ROCHPL_CMD: ${ROCHPL_CMD}"
+ROCHPL_CMD="${ROCHPL_EXEC} -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
+echo "ROCHPL_CMD: ${ROCHPL_CMD}"
 
-# # Start Omnistat
-# ${OMNISTAT_WRAPPER} usermode --start --interval ${SAMPLING_INTERVAL}
+# Start Omnistat
+${OMNISTAT_WRAPPER} usermode --start --interval ${SAMPLING_INTERVAL}
 
-# # Run the application
-# echo "Starting rocHPL. $(date)"
-# echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_start.txt
+# Run the application
+echo "Starting rocHPL. $(date)"
+echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_start.txt
 
-# srun -n ${N_MPI} ${AFFINITY} $EE_TOOLS_PATH/tools/app_launcher.sh $ROCHPL_CMD > ${RUN_DIR}/app_output.txt
+srun -n ${N_MPI} ${AFFINITY} $EE_TOOLS_PATH/tools/app_launcher.sh $ROCHPL_CMD > ${RUN_DIR}/app_output.txt
 
-# echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_end.txt
-# echo "Finished rocHPL. $(date)"
+echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_end.txt
+echo "Finished rocHPL. $(date)"
 
-# # Finish Omnistat, generate summary pdf and copy database
-# ${OMNISTAT_WRAPPER} usermode --stopexporters
-# ${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf --export ${RUN_DIR}
-# ${OMNISTAT_WRAPPER} usermode --stopserver
-# mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
-# mv exporter.log vic_server.log ${RUN_DIR}
+# Finish Omnistat, generate summary pdf and copy database
+${OMNISTAT_WRAPPER} usermode --stopexporters
+${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf --export ${RUN_DIR}
+${OMNISTAT_WRAPPER} usermode --stopserver
+mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
+mv exporter.log vic_server.log ${RUN_DIR}
 
 
 export RUN_DIR=${WORK_DIR}/rocHPL-MxP
