@@ -10,6 +10,7 @@
 #### Global parameters
 EE_TOOLS_PATH=${HOME}/util/energy_efficiency_tools  # EDIT: location of the energy_efficiency_tools directory 
 ROCHPL_EXEC=${HOME}/code/energy_efficiency/apps/rocHPL/code/rocHPL/build/run_rochpl
+ROCHPLMXP_EXEC=${HOME}/code/energy_efficiency/apps/rocHPL-MxP/code/rocHPL-MxP/build/run_rochplmxp
 
 #### Job parameters
 WORK_DIR=$PWD                          # EDIT: Work directory for the frequency sweep 
