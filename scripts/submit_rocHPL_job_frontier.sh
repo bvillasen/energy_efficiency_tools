@@ -15,7 +15,7 @@ ROCHPL_EXEC=${HOME}/code/energy_efficiency/apps/rocHPL/code/rocHPL/build/run_roc
 WORK_DIR=$PWD                          # EDIT: Work directory for the frequency sweep 
 N_MPI_PER_NODE=8                       # EDIT: Number of MPI ranks per node 
 N_CORES=7
-AFFINITY="-c ${n_cores} --cpu-bind=cores --threads-per-core=1 --gpus-per-task=1 --gpu-bind=closest" 
+AFFINITY="-c ${N_CORES} --cpu-bind=cores --threads-per-core=1 --gpus-per-task=1 --gpu-bind=closest" 
 N_NODES=${SLURM_JOB_NUM_NODES}
 N_MPI=$((N_NODES*N_MPI_PER_NODE))
 
