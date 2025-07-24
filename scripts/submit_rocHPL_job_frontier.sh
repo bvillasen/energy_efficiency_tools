@@ -118,7 +118,7 @@ fi
 export ENERGY_COUNTER_DIR=${RUN_DIR}
 
 
-ROCHPLMXP_CMD="${ROCHPLMXP_EXEC} -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
+ROCHPLMXP_CMD="${ROCHPLMXP_EXEC} -P ${HPL_P} -Q ${HPL_Q} -N ${HPL_N} --NB ${HPL_NB} "
 echo "ROCHPLMXP_CMD: ${ROCHPLMXP_CMD}"
 
 # Start Omnistat
