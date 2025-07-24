@@ -70,6 +70,7 @@ HPL_NB=512
 HPL_f=0.3
 N_ITER=1
 export OMP_NUM_THREADS=${N_CORES}
+
 export RUN_DIR=${WORK_DIR}/rocHPL
 if [ ! -d "${RUN_DIR}" ]; then
   mkdir -p ${RUN_DIR}
@@ -86,20 +87,50 @@ echo -e "OMP_NUM_THREADS: ${OMP_NUM_THREADS}"
 echo -e "RUN_DIR: ${RUN_DIR}"
 
 
-ROCHPL_CMD="${ROCHPL_EXEC} -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
-echo "ROCHPL_CMD: ${ROCHPL_CMD}"
+# ROCHPL_CMD="${ROCHPL_EXEC} -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
+# echo "ROCHPL_CMD: ${ROCHPL_CMD}"
+
+# # Start Omnistat
+# ${OMNISTAT_WRAPPER} usermode --start --interval ${SAMPLING_INTERVAL}
+
+# # Run the application
+# echo "Starting rocHPL. $(date)"
+# echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_start.txt
+
+# srun -n ${N_MPI} ${AFFINITY} $EE_TOOLS_PATH/tools/app_launcher.sh $ROCHPL_CMD > ${RUN_DIR}/app_output.txt
+
+# echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_end.txt
+# echo "Finished rocHPL. $(date)"
+
+# # Finish Omnistat, generate summary pdf and copy database
+# ${OMNISTAT_WRAPPER} usermode --stopexporters
+# ${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf --export ${RUN_DIR}
+# ${OMNISTAT_WRAPPER} usermode --stopserver
+# mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
+# mv exporter.log vic_server.log ${RUN_DIR}
+
+
+export RUN_DIR=${WORK_DIR}/rocHPL-MxP
+if [ ! -d "${RUN_DIR}" ]; then
+  mkdir -p ${RUN_DIR}
+fi
+export ENERGY_COUNTER_DIR=${RUN_DIR}
+
+
+ROCHPLMXP_CMD="${ROCHPLMXP_EXEC} -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
+echo "ROCHPLMXP_CMD: ${ROCHPLMXP_CMD}"
 
 # Start Omnistat
 ${OMNISTAT_WRAPPER} usermode --start --interval ${SAMPLING_INTERVAL}
 
 # Run the application
-echo "Starting rocHPL. $(date)"
+echo "Starting rocHPL-MxP. $(date)"
 echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_start.txt
 
-srun -n ${N_MPI} ${AFFINITY} $EE_TOOLS_PATH/tools/app_launcher.sh $ROCHPL_CMD > ${RUN_DIR}/app_output.txt
+srun -n ${N_MPI} ${AFFINITY} $EE_TOOLS_PATH/tools/app_launcher.sh $ROCHPLMXP_CMD > ${RUN_DIR}/app_output.txt
 
 echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_end.txt
-echo "Finished rocHPL. $(date)"
+echo "Finished rocHPL-MxP. $(date)"
 
 # Finish Omnistat, generate summary pdf and copy database
 ${OMNISTAT_WRAPPER} usermode --stopexporters
@@ -107,8 +138,6 @@ ${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} 
 ${OMNISTAT_WRAPPER} usermode --stopserver
 mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
 mv exporter.log vic_server.log ${RUN_DIR}
-
-
 
 
 
