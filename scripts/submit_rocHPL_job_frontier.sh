@@ -31,6 +31,13 @@ module load craype-accel-amd-gfx90a
 export MPICH_GPU_SUPPORT_ENABLED=1
 module list
 
+
+#### Setup Omnistat
+export OMNISTAT_VICTORIA_DATADIR=/tmp/omnistat/${SLURM_JOB_ID}
+SAMPLING_INTERVAL=0.1
+ml use /autofs/nccs-svm1_sw/crusher/amdsw/modules
+ml omnistat-wrapper/1.6.0
+
 ##################################################
 echo "SLUM_NODES=$SLURM_JOB_NUM_NODES  NODE_LIST:$SLURM_NODELIST"
 echo "Starting SLURM job. $(date)"
@@ -55,7 +62,7 @@ elif [ "${N_MPI}" -eq 128 ]; then
 elif [ "${N_MPI}" -eq 256 ]; then
   HPL_P=16; HPL_Q=16; HPL_N=1448000; HPL_p=2; HPL_q=4; 
 else
-  echo -e "${RED}ERROR. Configuration iis not set for N_MPI=${N_MPI} ${NC}"
+  echo -e "${RED}ERROR. Configuration is not set for N_MPI=${N_MPI} ${NC}"
   return
 fi
 
@@ -79,14 +86,22 @@ echo -e "RUN_DIR: ${RUN_DIR}"
 ROCHPL_CMD="${ROCHPL_EXEC} -P ${HPL_P} -Q ${HPL_Q} -p ${HPL_p} -q ${HPL_q} -N ${HPL_N} --NB ${HPL_NB} -f ${HPL_f} --it ${N_ITER}"
 echo "ROCHPL_CMD: ${ROCHPL_CMD}"
 
+# Start Omnistat
+${OMNISTAT_WRAPPER} usermode --start --interval ${SAMPLING_INTERVAL}
+
 # Run the application
 echo "Starting application. $(date)"
 echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_start.txt
 
 srun -n ${N_MPI} ${AFFINITY} $EE_TOOLS_PATH/tools/app_launcher.sh $ROCHPL_CMD > ${RUN_DIR}/app_output.txt
 
-
 echo $(date +"%Y-%m-%d %H:%M:%S.%N") > ${RUN_DIR}/time_end.txt
 echo "Finished application. $(date)"
+
+# Finish Omnistat, generate summary pdf and copy database
+${OMNISTAT_WRAPPER} usermode --stopexporters
+${OMNISTAT_WRAPPER} query --interval ${SAMPLING_INTERVAL} --job ${SLURM_JOB_ID} --pdf ${RUN_DIR}/omnistat.${SLURM_JOB_ID}.pdf --export ${RUN_DIR}
+${OMNISTAT_WRAPPER} usermode --stopserver
+
 
 echo "Finished SLURM job. $(date)"
