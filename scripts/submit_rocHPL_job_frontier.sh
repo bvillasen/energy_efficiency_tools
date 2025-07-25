@@ -111,6 +111,32 @@ mv /tmp/omnistat/${SLURM_JOB_ID} ${RUN_DIR}/data_omnistat.${SLURM_JOB_ID}
 mv exporter.log vic_server.log ${RUN_DIR}
 
 
+# Multi rank configuration
+if [ "${N_MPI}" -eq 1 ]; then
+  HPL_P=1; HPL_Q=1; HPL_N=90112; HPL_p=1; HPL_q=1;
+elif [ "${N_MPI}" -eq 2 ]; then
+  HPL_P=1; HPL_Q=2; HPL_N=128000; HPL_p=1; HPL_q=2;
+elif [ "${N_MPI}" -eq 4 ]; then
+  HPL_P=2; HPL_Q=2; HPL_N=180224; HPL_p=2; HPL_q=2; 
+elif [ "${N_MPI}" -eq 8 ]; then
+  # HPL_P=2; HPL_Q=4; HPL_N=256000; HPL_p=2; HPL_q=4;
+  HPL_P=2; HPL_Q=4; HPL_N=362000; HPL_p=2; HPL_q=4; 
+elif [ "${N_MPI}" -eq 16 ]; then
+  # HPL_P=4; HPL_Q=4; HPL_N=362000; HPL_p=2; HPL_q=4;
+  HPL_P=4; HPL_Q=4; HPL_N=512000; HPL_p=2; HPL_q=4;
+elif [ "${N_MPI}" -eq 32 ]; then
+  HPL_P=4; HPL_Q=8; HPL_N=512000; HPL_p=2; HPL_q=4;
+elif [ "${N_MPI}" -eq 64 ]; then
+  HPL_P=8; HPL_Q=8; HPL_N=724000; HPL_p=2; HPL_q=4; 
+elif [ "${N_MPI}" -eq 128 ]; then
+  HPL_P=8; HPL_Q=16; HPL_N=1024000; HPL_p=2; HPL_q=4;
+elif [ "${N_MPI}" -eq 256 ]; then
+  HPL_P=16; HPL_Q=16; HPL_N=1448000; HPL_p=2; HPL_q=4; 
+else
+  echo -e "${RED}ERROR. Configuration is not set for N_MPI=${N_MPI} ${NC}"
+  return
+fi
+
 export RUN_DIR=${WORK_DIR}/rocHPL-MxP
 if [ ! -d "${RUN_DIR}" ]; then
   mkdir -p ${RUN_DIR}
