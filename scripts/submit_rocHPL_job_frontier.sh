@@ -62,6 +62,10 @@ elif [ "${N_MPI}" -eq 128 ]; then
   HPL_P=8; HPL_Q=16; HPL_N=1024000; HPL_p=2; HPL_q=4;
 elif [ "${N_MPI}" -eq 256 ]; then
   HPL_P=16; HPL_Q=16; HPL_N=1448000; HPL_p=2; HPL_q=4; 
+elif [ "${N_MPI}" -eq 512 ]; then
+  HPL_P=16; HPL_Q=32; HPL_N=2048000; HPL_p=2; HPL_q=4; 
+elif [ "${N_MPI}" -eq 1024 ]; then
+  HPL_P=32; HPL_Q=32; HPL_N=2896000; HPL_p=2; HPL_q=4; 
 else
   echo -e "${RED}ERROR. Configuration is not set for N_MPI=${N_MPI} ${NC}"
   return
